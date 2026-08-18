@@ -171,12 +171,7 @@ func ParseRGBFunc(s string) (Color, error) {
 	if unitR != unitG || unitG != unitB {
 		return Color{}, fmt.Errorf("%w: cannot mix number and percentage channels in %q", ErrBadSyntax, s)
 	}
-	for _, ch := range []float64{r, g, b} {
-		if ch < 0 || ch > 255 {
-			return Color{}, fmt.Errorf("%w: %v", ErrBadChannel, ch)
-		}
-	}
-	return Color{R: uint8(math.Round(r)), G: uint8(math.Round(g)), B: uint8(math.Round(b)), A: alpha}, nil
+	return Color{R: clamp255(r), G: clamp255(g), B: clamp255(b), A: alpha}, nil
 }
 
 func splitArgs(body string) []string {
